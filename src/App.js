@@ -6,7 +6,7 @@ import { Container, Alert } from "react-bootstrap";
 import { SearchForm } from "./components/SearchForm";
 import { CustomCard } from "./components/CustomCard";
 import { MovieList } from "./components/MovieList";
-import { fetchMovies } from "./helpers/axioshelper";
+import { fetchMovies } from "./helpers/axiosHelper.js";
 
 function App() {
   // create state to store the data
