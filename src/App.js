@@ -1,82 +1,90 @@
-import { useState } from "react";
-import { Alert, Container } from "react-bootstrap";
 import "./App.css";
+import React, { useState } from "react";
+// import Button from "react-bootstrap/Button"; // passing /Button will render for button
+// import { Button } from "react-bootstrap"; // all react bootstrap wil reload
+import { Container, Alert } from "react-bootstrap";
+import { SearchForm } from "./components/SearchForm";
 import { CustomCard } from "./components/CustomCard";
 import { MovieList } from "./components/MovieList";
-import { SearchForm } from "./components/SearchForm";
-import { fetchMovieInfo } from "./helpers/axiosHelper";
+import { fetchMovies } from "./helpers/axioshelper";
 
 function App() {
-  const [movie, setMovie] = useState({});
-  const [error, showError] = useState("");
+  // create state to store the data
+  const [movies, setMovies] = useState({});
 
+  //if we don't have searched any movie
+  const [showError, setShowError] = useState("");
+
+  // state for happy and romantic movie list select
   const [movieList, setMovieList] = useState([]);
 
   const handleOnSubmit = async (str) => {
-    // e.preventDefault();
     // console.log(str);
-
-    const result = await fetchMovieInfo(str);
+    const result = await fetchMovies(str);
     // console.log(result);
-
+    // setMovies(result);
+    // if we don't have any movie then we show error message
     if (result.Response === "True") {
-      setMovie(result);
-      showError("");
+      setMovies(result);
+      setShowError("");
     } else {
-      setMovie({});
-      showError(result.Error);
+      setMovies({});
+      setShowError(result.Error);
     }
 
-    // setMovie(result);
-
-    // result.Response === "False" ? showError(result.Error) : showError("");
+    // using ternary
+    // result.Response === "False" ? setShowError(result.Error) : setShowError("");
   };
+  // console.log(movies);
 
-  // console.log(movie);
-
-  const movieSelect = (movie) => {
+  const handleOnMovieSelect = (movies) => {
     // console.log(movie);
-    setMovieList([...movieList, movie]);
-    setMovie({});
+    // spread operator to add the already avaulable movies
+    setMovieList([...movieList, movies]);
+    setMovies({});
   };
 
-  const deleteMovie = (imdbID) => {
-    if (window.confirm("Are you sure?")) {
-      const tempArg = movieList.filter((item) => item.imdbID !== imdbID);
-      setMovieList(tempArg);
+  // function for deleteing button
+  const handleOnDelete = (imdbID) => {
+    //CONFIRM
+    if (window.confirm) {
+      alert("Are you sure you want to delete this movie?");
     }
-
-    const tempMovieList = movieList.filter((item) => item.imdbID !== imdbID);
-    setMovieList(tempMovieList);
+    // filter the movie based on the id
+    const filteredList = movieList.filter((item) => item.imdbID !== imdbID);
+    // update the movieList state
+    setMovieList(filteredList);
   };
 
   return (
-    <div className="wrapper">
-      <Container>
-        {/* form */}
-        <SearchForm handleOnSubmit={handleOnSubmit} />
+    <>
+      <div className="wrapper">
+        <Container>
+          {/* form */}
+          <SearchForm handleOnSubmit={handleOnSubmit} />
 
-        <div className="mt-4 d-flex justify-content-center">
-          {/* card view search */}
-          {movie?.imdbID && (
-            <CustomCard movie={movie} inSearchForm={true} func={movieSelect} />
-          )}
-          {error && <Alert variant="danger">{error}</Alert>}
-        </div>
-        {/* 
-        {movie?.Response === "True" ? (
-       <CustomCard movie={movie} />
-        ) : (
-          <Alert variant="danger">No movie found</Alert>
-        )} */}
+          {/* movie card */}
+          <div className="d-flex mt-4 justify-content-center">
+            <div>
+              {/* condition to show the movie card - show only if movie have imdbID */}
+              {movies.imdbID && (
+                <CustomCard
+                  movies={movies}
+                  func={handleOnMovieSelect}
+                  inSearchForm={true}
+                />
+              )}
 
-        <hr />
+              {/* condition to show the error message if no movie */}
+              {showError && <Alert variant="danger">No Movie Found</Alert>}
+            </div>
+          </div>
 
-        {/* movie list  */}
-
-        <MovieList movieList={movieList} deleteMovie={deleteMovie} />
-      </Container>
-    </div>
+          <hr />
+          <MovieList movieList={movieList} handleOnDelete={handleOnDelete} />
+        </Container>
+      </div>
+    </>
   );
 }
 

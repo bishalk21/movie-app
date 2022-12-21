@@ -1,50 +1,56 @@
 import React from "react";
-import { Button, Card } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
-export const CustomList = ({ movie = {}, func, inSearchForm }) => {
-  const { Title, Poster, imdbRating, Plot } = movie;
-  //   console.log(movie);
+export const CustomList = ({ movies = {}, func, inSearchForm }) => {
+  const { Title, Poster, imdbRating, Plot } = movies;
+  //   console.log(movies);
   return (
-    <Card
-      style={{ width: "100%" }}
-      className="mt-3 d-flex flex-row justify-content-between"
-    >
-      <div style={{ width: "200px" }}>
-        <Card.Img variant="top" src={movie.Poster} style={{ width: "200px" }} />
-      </div>
+    <>
+      <Card
+        style={{ width: "100%" }}
+        className="mt-3 d-flex flex-row justify-content-between"
+      >
+        <Card.Img
+          variant="top"
+          src={movies.Poster}
+          style={{ width: "180px" }}
+        />
+        <Card.Body className="pt-5">
+          <Card.Title>{Title}</Card.Title>
+          <Card.Text>{Plot}</Card.Text>
+          <Card.Text>Rating: {imdbRating}</Card.Text>
 
-      <Card.Body>
-        <Card.Title>{Title}</Card.Title>
-        <Card.Text>Rating: {imdbRating}</Card.Text>
-        <div>{Plot}</div>
-
-        {inSearchForm ? (
-          <div className="d-flex justify-content-between mt-2">
-            <Button
-              onClick={() => func({ ...movie, mood: "happy" })}
-              variant="primary"
-            >
-              Happy
-            </Button>
-            <Button
-              onClick={() => func({ ...movie, mood: "romantic" })}
-              variant="danger"
-            >
-              Romantic
-            </Button>
-          </div>
-        ) : (
-          <div className="d-grid gap-2 ">
-            <Button
-              variant="danger"
-              size="lg"
-              onClick={() => func(movie.imdbID)}
-            >
-              Delete
-            </Button>
-          </div>
-        )}
-      </Card.Body>
-    </Card>
+          {/* if we are in search form then show the button */}
+          {inSearchForm ? (
+            <div className="d-flex justify-content-between mt-3">
+              <Button
+                variant="primary"
+                onClick={() => func({ ...movies, mood: "happy" })}
+              >
+                {/* anonymous function to load on button clicked not on loadin time */}
+                Happy
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => func({ ...movies, mood: "romantic" })}
+              >
+                Romantic
+              </Button>
+            </div>
+          ) : (
+            <div className="d-grid gap-2">
+              <Button
+                variant="danger"
+                size="lg"
+                onClick={() => func(movies.imdbID)}
+              >
+                Delete Movie
+              </Button>
+            </div>
+          )}
+        </Card.Body>
+      </Card>
+    </>
   );
 };
