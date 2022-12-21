@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
 export const CustomList = ({ movies = {}, func, inSearchForm }) => {
-  const { Title, Poster, imdbRating, Plot } = movies;
+  const { Title, imdbRating, Plot } = movies;
   //   console.log(movies);
   return (
     <>
