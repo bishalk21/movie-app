@@ -24,3 +24,7 @@ From this project, I have learned the following:
 NOTE: ** Whenever using async/await, check where we are recieving the final data. **
 
 Right place to find state
+
+While learning:
+
+<img src="./learning.png">
