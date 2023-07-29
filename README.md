@@ -12,7 +12,6 @@ From this project, I have learned the following:
 - props, and props drilling and props updating
 - state and state lifting
 - react hooks - useState, useEffect
-- react components
 
 Tasks performed between the components of this Movie app:
 
